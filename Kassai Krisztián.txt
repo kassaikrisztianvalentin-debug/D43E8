@@ -24,3 +24,21 @@ Kassai Krisztián
 7.4 UPDATE tanulok SET atlag = 4.5 AND osztondijas = 1 WHERE nev = "Kovács Emma" 
 7.5 DELETE FROM tanulok WHERE id = 9
     SELECT COUNT(*) FROM tanuloselec
+
+8.1 SELECT id, nev FROM tanulok LIMIT 3
+8.2 SELECT nev, atlag FROM tanulok ORDER BY atlag DESC LIMIT 3
+8.3 SELECT nev, hianyzas FROM tanulok ORDER BY hianyzas LIMIT 2
+8.4 SELECT nev, atlag FROM tanulok WHERE varos = "Budapest" ORDER BY atlag desc LIMIT 3
+8.5 SELECT nev, osztaly, atlag FROM tanulok WHERE osztaly = "11.A" OR osztaly = "11.B" ORDER BY atlag DESC LIMIT 2
+
+9.1 SELECT COUNT(*) FROM tanulok
+9.2 SELECT MIN(hianyzas) FROM tanulok
+9.3 SELECT max(atlag) FROM tanulok
+9.4 SELECT sum(hianyzas) FROM tanulok
+9.5 SELECT AVG(atlag) FROM tanulok WHERE varos = "Budapest"
+
+10.1 SELECT nev, atlag FROM tanulok WHERE atlag >= 4 ORDER BY atlag DESC LIMIT 3
+10.2 SELECT nev,eletkor, varos, atlag FROM tanulok WHERE eletkor >= 17 AND (varos = "Érd" OR varos = "Budapest") ORDER BY atlag DESC LIMIT 3
+10.3 SELECT COUNT(*) FROM tanulok WHERE osztondijas = 0 AND hianyzas > 10
+10.4 SELECT AVG(atlag) FROM tanulok WHERE osztaly = "10.A" AND hianyzas <= 6
+10.5 SELECT nev, varos, osztaly, atlag, hianyzas FROM tanulok WHERE (varos = "Budapest" OR varos = "Érd") AND atlag >= 4 AND hianyzas <= 8 AND osztaly != "11.B" LIMIT 2
