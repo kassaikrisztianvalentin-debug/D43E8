@@ -1,0 +1,273 @@
+SQL GYAKORLÓFELADATOK - MOZI
+
+-- 01_mozi_alap.sql
+DROP DATABASE IF EXISTS mozi_gyakorlas;
+CREATE DATABASE mozi_gyakorlas;
+
+USE mozi_gyakorlas;
+
+CREATE TABLE filmek (
+id INT PRIMARY KEY,
+cim VARCHAR(120) NOT NULL,
+mufaj VARCHAR(50) NOT NULL,
+megjelenes_eve INT NOT NULL,
+hossz_perc INT NOT NULL,
+korhatar INT NOT NULL,
+ertekeles DECIMAL(3,1) NOT NULL,
+jegyar INT NOT NULL,
+magyar_szinkron BOOLEAN NOT NULL,
+rendezo VARCHAR(100)
+);
+
+INSERT INTO filmek
+(id, cim, mufaj, megjelenes_eve, hossz_perc, korhatar, ertekeles, jegyar, magyar_szinkron, rendezo)
+VALUES
+(1, 'Csillagkapu', 'Sci-fi', 1994, 121, 12, 7.1, 2200, 1, 'Roland Emmerich'),
+(2, 'A nagy szökés', 'Háborús', 1963, 172, 12, 8.2, 1800, 0, 'John Sturges'),
+(3, 'Éjszakai járat', 'Thriller', 2005, 85, 16, 6.5, 2100, 1, 'Wes Craven'),
+(4, 'Interstellar', 'Sci-fi', 2014, 169, 12, 8.7, 2900, 1, 'Christopher Nolan'),
+(5, 'Whiplash', 'Dráma', 2014, 106, 16, 8.5, 2500, 0, 'Damien Chazelle'),
+(6, 'Paddington', 'Családi', 2014, 95, 6, 7.3, 1900, 1, 'Paul King'),
+(7, 'Dűne', 'Sci-fi', 2021, 155, 12, 8.0, 3200, 1, 'Denis Villeneuve'),
+(8, 'A számolás joga', 'Dráma', 2016, 127, 12, 7.8, 2300, 1, 'Theodore Melfi'),
+(9, '1917', 'Háborús', 2019, 119, 16, 8.2, 2700, 1, 'Sam Mendes'),
+(10, 'Coco', 'Animáció', 2017, 105, 6, 8.4, 2000, 1, NULL),
+(11, 'Tőrbe ejtve', 'Krimi', 2019, 130, 12, 7.9, 2600, 1, 'Rian Johnson'),
+(12, 'A néma tanú', 'Krimi', 2008, 112, 16, 6.9, 1900, 0, NULL);
+
+
+4. ALAP SQL-LEKÉRDEZÉSEK
+
+-- 4.1.
+SELECT cim, mufaj, ertekeles
+FROM filmek;
+
+-- 4.2.
+SELECT id, cim, megjelenes_eve, hossz_perc
+FROM filmek;
+
+-- 4.3.
+SELECT cim, korhatar, jegyar
+FROM filmek;
+
+-- 4.4.
+SELECT cim, rendezo
+FROM filmek;
+
+-- 4.5.
+SELECT *
+FROM filmek;
+
+
+5. SZŰRÉS ÉS RENDEZÉS
+
+-- 5.1.
+SELECT cim, megjelenes_eve
+FROM filmek
+WHERE megjelenes_eve > 2015
+ORDER BY megjelenes_eve DESC;
+
+-- 5.2.
+SELECT cim, hossz_perc
+FROM filmek
+WHERE hossz_perc < 120
+ORDER BY hossz_perc ASC;
+
+-- 5.3.
+SELECT DISTINCT mufaj
+FROM filmek;
+
+-- 5.4.
+SELECT cim, jegyar
+FROM filmek
+ORDER BY jegyar ASC;
+
+-- 5.5.
+SELECT cim, mufaj, ertekeles
+FROM filmek
+WHERE ertekeles BETWEEN 7.5 AND 8.5
+ORDER BY ertekeles DESC;
+
+
+6. LOGIKAI OPERÁTOROK ÉS ÖSSZETETTEBB SZŰRÉSEK
+
+-- 6.1.
+SELECT cim, mufaj, ertekeles
+FROM filmek
+WHERE (mufaj = 'Sci-fi' OR mufaj = 'Dráma')
+AND ertekeles >= 7.5;
+
+-- 6.2.
+SELECT cim, korhatar
+FROM filmek
+WHERE korhatar != 16
+ORDER BY korhatar ASC;
+
+-- 6.3.
+SELECT cim, megjelenes_eve
+FROM filmek
+WHERE megjelenes_eve BETWEEN 2010 AND 2020;
+
+-- 6.4.
+SELECT cim, mufaj
+FROM filmek
+WHERE cim LIKE '%a%' OR cim LIKE '%A%';
+
+-- 6.5.
+SELECT cim, korhatar, jegyar, ertekeles
+FROM filmek
+WHERE jegyar <= 2500
+AND magyar_szinkron = 1
+AND korhatar <= 12
+ORDER BY ertekeles DESC;
+
+
+7. HIÁNYZÓ ADATOK ÉS ADATMÓDOSÍTÁS
+
+-- (Feltételezi a 01_mozi_alap.sql újbóli importálását)
+
+-- 7.1.
+SELECT id, cim, rendezo
+FROM filmek
+WHERE rendezo IS NULL;
+
+-- 7.2.
+INSERT INTO filmek (id, cim, mufaj, megjelenes_eve, hossz_perc, korhatar, ertekeles, jegyar, magyar_szinkron, rendezo)
+VALUES (13, 'Mars-expedíció', 'Sci-fi', 2026, 138, 12, 7.6, 3100, 0, NULL);
+
+SELECT *
+FROM filmek
+WHERE id = 13;
+
+-- 7.3.
+UPDATE filmek
+SET rendezo = 'Nagy Viktor'
+WHERE id = 13;
+
+SELECT cim, rendezo
+FROM filmek
+WHERE id = 13;
+
+-- 7.4.
+UPDATE filmek
+SET ertekeles = 8.1, magyar_szinkron = 1
+WHERE id = 13;
+
+SELECT cim, ertekeles, magyar_szinkron
+FROM filmek
+WHERE id = 13;
+
+-- 7.5.
+DELETE FROM filmek
+WHERE id = 13;
+
+SELECT *
+FROM filmek
+WHERE cim = 'Mars-expedíció';
+
+
+8. LEKÉRDEZÉSEK KORLÁTOZÁSA
+
+-- (Feltételezi a 01_mozi_alap.sql újbóli importálását)
+
+-- 8.1.
+SELECT cim, megjelenes_eve
+FROM filmek
+ORDER BY megjelenes_eve DESC
+LIMIT 4;
+
+-- 8.2.
+SELECT cim, jegyar
+FROM filmek
+ORDER BY jegyar DESC
+LIMIT 3;
+
+-- 8.3.
+SELECT cim, hossz_perc, korhatar
+FROM filmek
+WHERE korhatar <= 12
+ORDER BY hossz_perc ASC
+LIMIT 2;
+
+-- 8.4.
+SELECT cim, ertekeles
+FROM filmek
+WHERE magyar_szinkron = 1
+ORDER BY ertekeles DESC
+LIMIT 3;
+
+-- 8.5.
+SELECT cim, mufaj, jegyar
+FROM filmek
+WHERE mufaj IN ('Sci-fi', 'Dráma', 'Krimi')
+ORDER BY jegyar ASC
+LIMIT 4;
+
+
+9. ÖSSZESÍTŐ FÜGGVÉNYEK
+
+-- 9.1.
+SELECT COUNT(*) AS filmek_szama
+FROM filmek
+WHERE magyar_szinkron = 1;
+
+-- 9.2.
+SELECT AVG(hossz_perc) AS atlagos_hossz
+FROM filmek;
+
+-- 9.3.
+SELECT MAX(jegyar) AS legdragabb_jegyar
+FROM filmek;
+
+-- 9.4.
+SELECT AVG(ertekeles) AS atlagos_ertekeles
+FROM filmek
+WHERE mufaj = 'Sci-fi';
+
+-- 9.5.
+SELECT SUM(jegyar) AS osszes_jegyar
+FROM filmek
+WHERE korhatar = 12;
+
+
+10. ÖSSZETETT LEKÉRDEZÉSEK
+
+-- 10.1.
+SELECT cim, hossz_perc, ertekeles
+FROM filmek
+WHERE hossz_perc <= 130
+AND ertekeles >= 7.0
+ORDER BY ertekeles DESC
+LIMIT 3;
+
+-- 10.2.
+SELECT cim, korhatar, ertekeles, jegyar
+FROM filmek
+WHERE korhatar <= 12
+AND magyar_szinkron = 1
+AND jegyar <= 2500
+ORDER BY ertekeles DESC, jegyar ASC;
+
+-- 10.3.
+SELECT COUNT(*) AS filmek_szama
+FROM filmek
+WHERE megjelenes_eve > 2014
+AND hossz_perc >= 120
+AND ertekeles >= 7.5;
+
+-- 10.4.
+SELECT AVG(jegyar) AS atlagos_jegyar
+FROM filmek
+WHERE mufaj IN ('Sci-fi', 'Dráma', 'Krimi')
+AND ertekeles >= 7.5;
+
+-- 10.5.
+SELECT cim, mufaj, megjelenes_eve, hossz_perc, ertekeles, jegyar
+FROM filmek
+WHERE ertekeles >= 7.8
+AND megjelenes_eve > 2010
+AND hossz_perc <= 160
+AND korhatar != 16
+AND magyar_szinkron = 1
+ORDER BY ertekeles DESC, jegyar ASC
+LIMIT 2;
